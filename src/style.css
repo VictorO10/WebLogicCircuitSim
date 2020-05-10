@@ -5,3 +5,14 @@
 .signalOn {
 	background-color: Chartreuse;
 }
+
+div.wire {
+	height: 4px;
+	width: 30px;
+}
+
+/* And this to your table's `td` elements. */
+#LogicBlock td {
+   padding: 0; 
+   margin: 0;
+}

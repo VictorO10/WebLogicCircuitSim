@@ -6,13 +6,30 @@
 <title>Javascript Try Stuff</title>
 </head>
 <body>
-	<div id="myBox">
-		<button id="btnA">A</button>
-		<button id="btnB">B</button>
-	</div>
 	<div id="notA">not A</div>
-	<div id="aAndB">A and B</div>
 	<div id="aOrB">A or B</div>
+	<div>
+		<table id="LogicBlock">
+			<tr>
+				<!-- In Button -->
+				<td><button id="btnA">A</button></td>
+				<!-- In Wire -->
+				<td><div id="wireA" class="wire"></div></td>
+				<!-- Gate -->
+				<td rowspan="2"><img src="img/gates/andGate.png"></td>
+				<!-- Out Wire -->
+				<td rowspan="2"><div id="wireAAndB" class="wire"></td>
+				<!-- Out Button -->
+				<td rowspan="2"><button id="aAndB" disabled>A and B</td>
+			</tr>
+			<tr>
+				<!-- In Button -->
+				<td><button id="btnB">B</button></td>
+				<!-- In Wire -->
+				<td><div id="wireB" class="wire"></div></td>
+			</tr>
+		</table>
+	</div>
 </body>
 <script src="script.js"></script>
 </html>

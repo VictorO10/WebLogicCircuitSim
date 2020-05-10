@@ -1,25 +1,35 @@
 class Signal {
 	setClass()
 	{
-		var cl = this.obj.classList;
-		if (this.state == true) {
-			if (cl.contains('signalOff'))
-			{
-				cl.remove('signalOff');
+		var state = this.state;
+		this.elem.forEach(function (elem) {
+			var cl = elem.classList;
+			if (state == true) {
+				if (cl.contains('signalOff'))
+				{
+					cl.remove('signalOff');
+				}
+					cl.add('signalOn');
+			} else {
+				if (cl.contains('signalOn'))
+				{
+					cl.remove('signalOn');
+				}
+					cl.add('signalOff');
 			}
-			cl.add('signalOn');
-		} else {
-			if (cl.contains('signalOn'))
-			{
-				cl.remove('signalOn');
-			}
-			cl.add('signalOff');
-		}
+		});
 	}
 	
-	constructor(obj, state) {
-		this.obj = obj;
+	constructor(elem, state) {
+		this.elem = elem;
 		this.state = state;
+		this.setClass();
+	}
+
+	// Adds a HTML element to the element list.
+	addElem(elem){
+		var x = 5;
+		this.elem.push(elem);
 		this.setClass();
 	}
 
@@ -65,21 +75,29 @@ class LogicOr extends LogicBlock {
 	}
 }
 
-/// Attaches a signal to a HTML element.
-/// @returns an objects containing the HTML element and the signal.
-function addElemSig(elemId, value)
+/// Attaches an existing signal to a HTML element.
+/// @returns an object containing the HTML element.
+function addElemSig(elemId, sig)
 {
 	var elem = document.getElementById(elemId);
-	var sig = new Signal(elem, value);
+	sig.addElem(elem);
+}
+
+/// Attaches a new signal to a HTML element.
+/// @returns an object containing the HTML element and the signal.
+function addElemNewSig(elemId, value)
+{
+	var elem = document.getElementById(elemId);
+	var sig = new Signal([elem], value);
 
 	return {elem, sig};	
 }
 
-/// Attaches a signal to a HTML button and adds the click event to the button.
+/// Attaches a new signal to a HTML button and adds the click event to the button.
 /// @returns the signal
 function addBtnSig(btnId, value)
 {
-	let btnSig = addElemSig(btnId, value);
+	let btnSig = addElemNewSig(btnId, value);
 	btn = btnSig.elem;
 	sig = btnSig.sig
 	btn.addEventListener("click", sig.toggle.bind(sig));	
@@ -92,19 +110,24 @@ sigA = addBtnSig('btnA', false);
 sigB = addBtnSig('btnB', false);
 
 // Configure -not A- output signal.
-var sigNotA = addElemSig('notA', false).sig;
+var sigNotA = addElemNewSig('notA', false).sig;
 // Configure -not A- gate.
 var notGate = new LogicNot([sigA], [sigNotA]);
 setInterval("notGate.exec()", 10);
 
 // Configure -A and B- output signal.
-var sigAAndB = addElemSig('aAndB', false).sig;
+var sigAAndB = addElemNewSig('aAndB', false).sig;
 // Configure -A and B- gate.
 var andGate = new LogicAnd([sigA, sigB], [sigAAndB]);
 setInterval("andGate.exec()", 10);
 
 // Configure -A or B- output signal.
-var sigAOrB = addElemSig('aOrB', false).sig;
+var sigAOrB = addElemNewSig('aOrB', false).sig;
 // Configure -A or B- gate.
 var orGate = new LogicOr([sigA, sigB], [sigAOrB]);
 setInterval("orGate.exec()", 10);
+
+// Attach wires to the signals.
+sigA.addElem(document.getElementById("wireA"));
+sigB.addElem(document.getElementById("wireB"));
+sigAAndB.addElem(document.getElementById("wireAAndB"));
