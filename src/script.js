@@ -28,7 +28,6 @@ class Signal {
 
 	// Adds a HTML element to the element list.
 	addElem(elem){
-		var x = 5;
 		this.elem.push(elem);
 		this.setClass();
 	}
