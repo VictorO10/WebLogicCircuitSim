@@ -4,13 +4,20 @@ class Signal {
 		var state = this.state;
 		this.elem.forEach(function (elem) {
 			var cl = elem.classList;
+			var tagName = elem.tagName
 			if (state == true) {
+				if (tagName == 'BUTTON'){
+					elem.innerHTML='1';
+				}
 				if (cl.contains('signalOff'))
 				{
 					cl.remove('signalOff');
 				}
 					cl.add('signalOn');
 			} else {
+				if (tagName == 'BUTTON'){
+					elem.innerHTML='0';
+				}
 				if (cl.contains('signalOn'))
 				{
 					cl.remove('signalOn');
