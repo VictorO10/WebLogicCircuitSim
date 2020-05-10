@@ -65,33 +65,46 @@ class LogicOr extends LogicBlock {
 	}
 }
 
-// Configure button A.
-var btnA = document.getElementById('btnA');
-btnA.signal = new Signal(btnA, false);
-btnA.addEventListener("click", btnA.signal.toggle.bind(btnA.signal));
+/// Attaches a signal to a HTML element.
+/// @returns an objects containing the HTML element and the signal.
+function addElemSig(elemId, value)
+{
+	var elem = document.getElementById(elemId);
+	var sig = new Signal(elem, value);
 
-// Configure button B.
-var btnB = document.getElementById('btnB');
-btnB.signal = new Signal(btnB, false);
-btnB.addEventListener("click", btnB.signal.toggle.bind(btnB.signal));
+	return {elem, sig};	
+}
 
-// Configure not A output signal.
-var notA = document.getElementById('notA');
-notA.signal = new Signal(notA, false);
-// Configure not A gate.
-var notGate = new LogicNot([btnA.signal], [notA.signal]);
+/// Attaches a signal to a HTML button and adds the click event to the button.
+/// @returns the signal
+function addBtnSig(btnId, value)
+{
+	let btnSig = addElemSig(btnId, value);
+	btn = btnSig.elem;
+	sig = btnSig.sig
+	btn.addEventListener("click", sig.toggle.bind(sig));	
+
+	return sig;	
+}
+
+// Attach signals to buttons A and B.
+sigA = addBtnSig('btnA', false);
+sigB = addBtnSig('btnB', false);
+
+// Configure -not A- output signal.
+var sigNotA = addElemSig('notA', false).sig;
+// Configure -not A- gate.
+var notGate = new LogicNot([sigA], [sigNotA]);
 setInterval("notGate.exec()", 10);
 
-// Configure A and B output signal.
-var aAndB = document.getElementById('aAndB');
-aAndB.signal = new Signal(aAndB, false);
-// Configure A and B gate.
-var andGate = new LogicAnd([btnA.signal, btnB.signal], [aAndB.signal]);
+// Configure -A and B- output signal.
+var sigAAndB = addElemSig('aAndB', false).sig;
+// Configure -A and B- gate.
+var andGate = new LogicAnd([sigA, sigB], [sigAAndB]);
 setInterval("andGate.exec()", 10);
 
-// Configure A or B output signal.
-var aOrB = document.getElementById('aOrB');
-aOrB.signal = new Signal(aOrB, false);
-// Configure A or B gate.
-var orGate = new LogicOr([btnA.signal, btnB.signal], [aOrB.signal]);
+// Configure -A or B- output signal.
+var sigAOrB = addElemSig('aOrB', false).sig;
+// Configure -A or B- gate.
+var orGate = new LogicOr([sigA, sigB], [sigAOrB]);
 setInterval("orGate.exec()", 10);
